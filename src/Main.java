@@ -100,7 +100,7 @@ public class Main
         
         int newAns = -1;
         int depth = 0; // Pointing to the current working node layer of the tree.
-	int lastWipedLevel = 0;
+	int lastWipedLevel = size;
         try {
             File proofFile = new File(fname + ".proof");
             FileWriter writer;
@@ -135,7 +135,6 @@ public class Main
                         int l = 0;
 			if (isPruning) {
 			    writer.write("# " + depth + "\n");
-			    lastWipedLevel = depth;
 			}
                         writer.write("u ");
                         for (Integer ans : answers) {
@@ -151,7 +150,8 @@ public class Main
 			// Its parent is changing.
                         answers.set(depth -1, 99);
 			//Wipe out the logs at current level.
-			if (isPruning && lastWipedLevel != depth) {
+			if (isPruning && depth < lastWipedLevel) {
+			    // writer.write("* " + lastWipedLevel + " \n");
 			    writer.write("w " + (depth + 1) + "\n");
 			    lastWipedLevel = depth + 1;
 			}
@@ -164,6 +164,9 @@ public class Main
                             if (resCount < res.length) {
                                 res[resCount ++] = answers;
                             }
+			    if (isPruning) {
+			        writer.write("# " + (depth + 1) + "\n");
+			    }
                             writer.write("v ");
                             int d = 0;
                             for (Integer l : answers) {
@@ -174,6 +177,7 @@ public class Main
                                 d ++;
                             }
                             writer.write("\n");
+			    answers.set(depth, 99);
                             continue;
                         }
                         depth ++;
@@ -181,7 +185,6 @@ public class Main
                         int l = 0;
 			if (isPruning) {
 			    writer.write("# " + (depth + 1) + "\n");
-			    lastWipedLevel = depth + 1;
 			}
                         writer.write("u ");
                         for (Integer ans : answers) {
