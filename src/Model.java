@@ -134,8 +134,4 @@ public class Model{
         }
         return constraints;
     }
-    
-    public int readModelFile() {
-        return -1;
-    }
 }

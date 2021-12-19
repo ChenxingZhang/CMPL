@@ -149,8 +149,9 @@ public class Main
                         answers.set(depth, 99);
 			// Its parent is changing.
                         answers.set(depth -1, 99);
-			//Wipe out the logs at current level.
-			if (isPruning && depth < lastWipedLevel) {
+			// Wipe out the logs at current level.
+			// To avoid excessive wipe command, wipe only happens occasionally.
+			if (isPruning && depth < (size* 3/4)) {
 			    // writer.write("* " + lastWipedLevel + " \n");
 			    writer.write("w " + (depth + 1) + "\n");
 			    lastWipedLevel = depth + 1;
@@ -210,6 +211,7 @@ public class Main
         long endingTime = new Date().getTime();
         System.out.println("The total running time in seconds: " + 
             ((double)(endingTime - startingTime))/1000.0);
+	System.out.println("Found " + resCount + " solutions.");
     }
     
     /*
